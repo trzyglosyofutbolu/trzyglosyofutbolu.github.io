@@ -4,5 +4,22 @@
   "subscribe_form_action": "",
   "subscribe_page_url": "",
   "window_days": 180,
-  "contact_email": ""
+  "contact_email": "",
+  "topics": [
+    {"label": "Jan Urban", "re": "\\burban"},
+    {"label": "Reprezentacja", "re": "reprezentac|\\bkadr"},
+    {"label": "PZPN i Kulesza", "re": "pzpn|kulesz"},
+    {"label": "Lech", "re": "\\blech(?!i)"},
+    {"label": "Legia", "re": "\\blegi"},
+    {"label": "Jagiellonia", "re": "jagiellon"},
+    {"label": "Raków", "re": "\\brakow"},
+    {"label": "Ekstraklasa", "re": "ekstraklas"},
+    {"label": "Sędziowie", "re": "sedzi|\\bvar\\b"},
+    {"label": "Zieliński", "re": "zielinsk"},
+    {"label": "Lewandowski", "re": "lewandowsk"},
+    {"label": "Mundial 2026", "re": "mundial|mistrzostw\\w* swiata"},
+    {"label": "Liga Mistrzów", "re": "\\bli(ga|gi|dze) mistrz"},
+    {"label": "Premier League", "re": "premier leag|manchester|liverpool|arsenal|chelsea"},
+    {"label": "Rumunia", "re": "rumuni|bukareszt"}
+  ]
 }
