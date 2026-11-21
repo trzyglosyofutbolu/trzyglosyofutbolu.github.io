@@ -81,6 +81,7 @@ def main():
         "subscribePageUrl": cfg.get("subscribe_page_url", ""),
         "siteUrl": base,
         "contactEmail": cfg.get("contact_email", ""),
+        "topics": cfg.get("topics", []),
         "built": datetime.date.today().isoformat(),
     }, ensure_ascii=False))
     (OUT / "index.html").write_text(page, encoding="utf-8")
