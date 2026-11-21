@@ -38,7 +38,6 @@ p{text-wrap:pretty}
 @keyframes sway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(5deg)}}
 @keyframes sway2{0%,100%{transform:rotate(7deg)}50%{transform:rotate(-5deg)}}
 @keyframes mow{from{background-position:0 0}to{background-position:0 128px}}
-@keyframes spin{from{transform:rotateX(-22deg) rotateY(0)}to{transform:rotateX(-22deg) rotateY(360deg)}}
 
 /* ===== HERO ===== */
 .hero{position:relative;overflow:hidden;background:
@@ -111,15 +110,32 @@ h1 em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--accent)}
 .sub form{display:flex;gap:8px;flex-wrap:wrap}
 .sub input[type=email]{flex:1 1 180px;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--ink);font:inherit}
 
-/* obracająca się kostka z liczbami */
-.cubebox{flex:1 1 220px;height:230px;display:flex;align-items:center;justify-content:center;perspective:900px;position:relative}
-.cube{position:relative;width:150px;height:150px;transform-style:preserve-3d;animation:spin 24s linear infinite}
-.face{position:absolute;inset:0;border:1.5px solid var(--accent);border-radius:8px;background:rgba(212,240,90,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;backface-visibility:visible}
-.face b{font:700 44px/1 var(--display);font-variant-numeric:tabular-nums}
-.face span{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#E6F5A8}
-.f1{transform:rotateY(0) translateZ(75px)} .f2{transform:rotateY(90deg) translateZ(75px)} .f3{transform:rotateY(180deg) translateZ(75px)} .f4{transform:rotateY(-90deg) translateZ(75px)}
-.f5{transform:rotateX(90deg) translateZ(75px);background:rgba(212,240,90,.14)} .f6{transform:rotateX(-90deg) translateZ(75px)}
-.cubebox::after{content:"";position:absolute;left:50%;bottom:6px;width:200px;height:40px;margin-left:-100px;border-radius:50%;background:radial-gradient(closest-side,rgba(212,240,90,.3),transparent);filter:blur(8px)}
+/* ===== O CZYM TERAZ ROZMAWIAJĄ: tablica taktyczna z żetonami ===== */
+.topicband{position:relative;margin-top:64px}
+.tb-grid{display:flex;flex-wrap:wrap;gap:12px 40px;align-items:center}
+.tb-text{flex:1 1 280px;min-width:0}
+.tb-text .lab2{margin:0 0 8px;font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#E6F5A8}
+.tb-text h2{margin:0 0 10px;font:800 clamp(36px,4.6vw,54px)/.95 var(--display);text-transform:uppercase}
+.tb-text p{margin:0;color:var(--soft);font-size:15px;max-width:42ch}
+.board-scene{flex:2 1 520px;min-width:0;height:400px;perspective:1300px;display:flex;align-items:center;justify-content:center}
+.board{position:relative;width:min(580px,100%);aspect-ratio:580/350;border-radius:16px;transform-style:preserve-3d;
+  transform:rotateX(calc(50deg + var(--rx,0deg))) rotateZ(calc(-8deg + var(--ry,0deg)));transition:transform .35s ease-out;
+  background:repeating-linear-gradient(90deg,#1D5735 0 9.09%,#1A4F30 9.09% 18.18%);
+  box-shadow:0 0 0 10px #101A14,0 0 0 11px #2A3A32,0 50px 70px -20px rgba(0,0,0,.9)}
+.board svg{position:absolute;inset:0;width:100%;height:100%}
+.spot{position:absolute;left:var(--x);top:var(--y);width:90px;height:26px;margin:-13px 0 0 -45px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),transparent);pointer-events:none}
+.tok{position:absolute;left:var(--x);top:var(--y);transform-origin:50% 100%;transform:translate(-50%,-100%) rotateX(-50deg);transform-style:preserve-3d}
+.tok button{appearance:none;cursor:pointer;display:flex;align-items:baseline;gap:7px;white-space:nowrap;padding:8px 14px;border-radius:999px;
+  font:700 var(--fs,16px)/1 var(--display);letter-spacing:.03em;text-transform:uppercase;color:#0B120F;background:#EEF2EC;border:0;
+  box-shadow:0 6px 0 #A7B2A9,0 14px 18px -6px rgba(0,0,0,.7);animation:float 5s ease-in-out infinite;animation-delay:var(--fd,0s);transition:background .15s,transform .15s}
+.tok button small{font:500 11px var(--mono);opacity:.65}
+.tok.hot button{background:var(--accent);box-shadow:0 6px 0 #8DA033,0 14px 18px -6px rgba(0,0,0,.7)}
+.tok button:hover{background:#fff}
+.tok.hot button:hover{background:#E4FA7A}
+.tok button[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:3px}
+.topicpill{display:none;align-items:center;gap:8px;min-height:38px;padding:0 6px 0 13px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:600 14px var(--body)}
+.topicpill.on{display:inline-flex}
+.topicpill button{appearance:none;border:0;background:rgba(11,18,15,.15);color:inherit;width:28px;height:28px;border-radius:8px;cursor:pointer;font:600 16px/1 var(--body)}
 
 /* ===== FILTRY ===== */
 .controls{position:sticky;top:0;z-index:5;margin-top:56px;padding:14px 0;background:rgba(11,18,15,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -195,7 +211,11 @@ footer .floor{bottom:-320px;height:600px}
   .bub{position:relative;left:auto !important;right:auto !important;top:auto !important;width:86%}
   .bub.b2{align-self:flex-end}
   .bub.b3{margin-left:4%}
-  .cubebox{display:none}
+  .board-scene{height:auto;flex-basis:100%;padding:10px 0 30px}
+  .board{aspect-ratio:auto;transform:rotateX(24deg);padding:30px 18px 34px;display:flex;flex-wrap:wrap;gap:18px 12px;justify-content:center}
+  .tok{position:relative;left:auto;top:auto;transform:none}
+  .spot{display:none}
+  .tok button{font-size:15px !important;padding:8px 12px}
   .controls{position:static}
   .item{grid-template-columns:56px 1fr;gap:14px;padding:16px}
   .date{width:54px;height:54px}
@@ -259,7 +279,24 @@ footer .floor{bottom:-320px;height:600px}
         <p>Raz dziennie sprawdzamy, co nowego opublikowali.</p>
         <div id="sub-body"></div>
       </div>
-      <div class="cubebox" aria-hidden="true"><div class="cube" id="cube"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="topicband" id="tematy" aria-labelledby="tb-h">
+  <div class="wrap tb-grid">
+    <div class="tb-text">
+      <p class="lab2" id="tb-range">Ostatnie 60 dni</p>
+      <h2 id="tb-h">O czym teraz rozmawiają</h2>
+      <p>Tematy, które wracają w ich tekstach, podcastach i programach. Kliknij żeton, żeby zobaczyć tylko te materiały.</p>
+    </div>
+    <div class="board-scene" id="board-scene">
+      <div class="board" id="board">
+        <svg viewBox="0 0 580 350" preserveAspectRatio="none" fill="none" stroke="rgba(236,246,220,.55)" stroke-width="2" aria-hidden="true">
+          <rect x="12" y="12" width="556" height="326" rx="4"/><line x1="290" y1="12" x2="290" y2="338"/><circle cx="290" cy="175" r="46"/>
+          <rect x="12" y="95" width="70" height="160"/><rect x="498" y="95" width="70" height="160"/>
+        </svg>
+      </div>
     </div>
   </div>
 </section>
@@ -268,6 +305,7 @@ footer .floor{bottom:-320px;height:600px}
   <div class="wrap ctl-grid">
     <div class="seg" role="group" aria-label="Autor" id="f-author"></div>
     <div class="seg" role="group" aria-label="Rodzaj" id="f-cat"></div>
+    <span class="topicpill" id="f-topic"></span>
     <label class="search" for="q"><input id="q" type="search" placeholder="Szukaj: Urban, Lech, mundial…" aria-label="Szukaj w tytułach i opisach"></label>
   </div>
 </div>
@@ -300,7 +338,8 @@ const ICON = {
 };
 const MONTHS = ["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
 const DAYS = ["nd","pn","wt","śr","cz","pt","sb"];
-const state = {author:"all", cat:"all", q:""};
+const state = {author:"all", cat:"all", q:"", topic:null};
+const TOPICS = (CFG.topics||[]).map(t=>({label:t.label, re:new RegExp(t.re)}));
 
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ł/g,"l");}
@@ -309,6 +348,7 @@ function fmt(s){ if(!s) return ""; const [y,m,d]=s.split("-"); return `${+d}.${m
 function matches(r, ignore){
   if(ignore!=="author" && state.author!=="all" && !r.keys.includes(state.author)) return false;
   if(ignore!=="cat" && state.cat!=="all" && r.cat!==state.cat) return false;
+  if(state.topic){const t=TOPICS.find(x=>x.label===state.topic); if(t && !t.re.test(norm(r.title+" "+r.summary))) return false;}
   if(state.q){const n=norm(state.q); if(!norm(r.title+" "+r.summary+" "+r.medium+" "+r.authors).includes(n)) return false;}
   return true;
 }
@@ -321,6 +361,11 @@ function seg(el, opts, key){
   el.querySelectorAll("button").forEach(b=>b.onclick=()=>{state[key]=b.dataset.v; render();});
 }
 function render(){
+  const tp=document.getElementById("f-topic");
+  tp.className = "topicpill" + (state.topic ? " on" : "");
+  tp.innerHTML = state.topic ? `Temat: ${esc(state.topic)} <button type="button" aria-label="Usuń filtr tematu">×</button>` : "";
+  if(state.topic) tp.querySelector("button").onclick=()=>{ state.topic=null; render(); };
+  document.querySelectorAll(".tok button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.t===state.topic)));
   seg(document.getElementById("f-author"), AUTHORS, "author");
   seg(document.getElementById("f-cat"), CATS, "cat");
   const rows = DATA.filter(r=>matches(r));
@@ -383,9 +428,26 @@ function renderHero(){
     return `<button type="button" class="bub b${i+1} a-${k}" data-a="${k}" aria-label="Pokaż tylko: ${FULL[k]}"><span class="nm">${FULL[k].split(" ")[1]}</span><span class="tt">${r?esc(r.title):""}</span><span class="dt">${r?esc(r.medium)+" · "+last2(r):""}</span></button>`; }).join("");
   document.querySelectorAll(".bub").forEach(b=>b.onclick=()=>pick(b.dataset.a));
 
-  const counts = Object.fromEntries(CATS.slice(1).map(([v])=>[v, DATA.filter(r=>r.cat===v).length]));
-  const faces = [[counts.teksty,"teksty"],[counts.podcasty,"podcasty"],[counts.wideo,"wideo i TV"],[counts.ksiazki,"książki"],[DATA.length,"razem"],[3,"autorów"]];
-  document.getElementById("cube").innerHTML = faces.map((f,i)=>`<div class="face f${i+1}"><b>${f[0]}</b><span>${f[1]}</span></div>`).join("");
+  // tematy na tablicy taktycznej
+  const lastD = DATA[0] ? new Date(DATA[0].date+"T12:00:00") : new Date();
+  const from = new Date(lastD.getTime() - 60*864e5).toISOString().slice(0,10);
+  const recentRows = DATA.filter(r=>r.date>=from);
+  const ranked = TOPICS.map(t=>({label:t.label, n:recentRows.filter(r=>t.re.test(norm(r.title+" "+r.summary))).length}))
+    .filter(t=>t.n>=2).sort((a,b)=>b.n-a.n).slice(0,8);
+  const SLOTS=[[50,30],[24,44],[76,44],[38,66],[62,66],[14,82],[50,88],[86,82]];
+  const maxN = ranked[0]?.n || 1;
+  document.getElementById("board").insertAdjacentHTML("beforeend", ranked.map((t,i)=>{
+    const [x,y]=SLOTS[i]; const fs=(14+8*t.n/maxN).toFixed(1);
+    return `<span class="spot" style="--x:${x}%;--y:${y}%"></span><div class="tok${i<2?" hot":""}" style="--x:${x}%;--y:${y}%"><button type="button" data-t="${esc(t.label)}" style="--fs:${fs}px;--fd:${(-i*0.7).toFixed(1)}s" aria-label="Pokaż materiały o temacie: ${esc(t.label)}">${esc(t.label)}</button></div>`;
+  }).join(""));
+  document.querySelectorAll(".tok button").forEach(b=>b.onclick=()=>{ state.topic = state.topic===b.dataset.t ? null : b.dataset.t; render(); document.querySelector(".controls").scrollIntoView({behavior:"smooth"}); });
+  if(!ranked.length) document.getElementById("tematy").hidden = true;
+  const bscene=document.getElementById("board-scene"), board=document.getElementById("board");
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches && matchMedia("(hover: hover)").matches){
+    bscene.addEventListener("mousemove", e=>{ const r=bscene.getBoundingClientRect(); const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      board.style.setProperty("--rx",(-y*10).toFixed(1)+"deg"); board.style.setProperty("--ry",(x*14).toFixed(1)+"deg"); });
+    bscene.addEventListener("mouseleave", ()=>{ board.style.setProperty("--rx","0deg"); board.style.setProperty("--ry","0deg"); });
+  }
   // paralaksa za kursorem
   const hero = document.getElementById("hero"), stack = document.getElementById("scene");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
